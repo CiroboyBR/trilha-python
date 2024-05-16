@@ -1,4 +1,22 @@
 ## Inicio da classe conta
+class Cliente:
+    def __init__(self, nome) -> None:
+        self.conta = None
+        self.nome = nome
+
+    def cadastraConta(self):
+        self.conta = Conta()
+        print(f"Conta do cliente {self.nome} cadastrada!")
+
+    def imprimeExtratoConta(self):
+        self.conta.imprimirExtrato(self.nome)
+    
+    def sacar(self):
+        self.conta.sacar()
+    
+    def depositar(self):
+        self.conta.depositar()
+
 class Conta:
     def __init__(self) -> None:
         self.saldo = float(0.0)
@@ -29,8 +47,9 @@ class Conta:
              self.extrato += f"Depósito: R$ {valor:.2f}\n"
              print(f"Operação realizada com sucesso.")
     
-    def imprimirExtrato(self):
+    def imprimirExtrato(self, nomeCliente):
         print("\n================ EXTRATO ================")
+        print(f"Cliente: {nomeCliente}\n")
         print("Não foram realizadas movimentações." if not self.extrato else self.extrato)
         print(f"\nSaldo: R$ {self.saldo:.2f}")
         print("==========================================")
@@ -39,6 +58,8 @@ class Conta:
 
 menu = """
 
+[C] Cadastrar Cliente
+[O] Registrar Conta
 [D] Depositar
 [S] Sacar
 [E] Extrato
@@ -47,16 +68,42 @@ menu = """
 => """
 
 #Insctanciando classe conta
-contaCorrente = Conta()
+cliente = None
 
 while True:
     opcao = input(menu)
-    if opcao.upper() == "D":
-        contaCorrente.depositar()
+    if opcao.upper() == "C":
+        if(cliente == None):
+            nome = input("Nome do cliente: ")
+            cliente = Cliente(nome)
+        else:
+            print("Cliente já cadastrado!")
+    elif opcao.upper() == "O":
+        if(cliente == None):
+            print("Cliente sem cadastrado!")
+        else:
+            cliente.cadastraConta()
+    elif opcao.upper() == "D":
+        if(cliente == None):
+            print("Cliente sem cadastrado!")
+        elif(cliente.conta == None ):
+            print("Cliente sem conta cadastrada!")
+        else:
+            cliente.depositar()       
     elif opcao.upper() == "S":
-        contaCorrente.sacar()
+        if(cliente == None):
+            print("Cliente sem cadastrado!")
+        elif(cliente.conta == None ):
+            print("Cliente sem conta cadastrada!")
+        else:
+            cliente.sacar()
     elif opcao.upper() == "E":
-        contaCorrente.imprimirExtrato()
+        if(cliente == None):
+            print("Cliente sem cadastrado!")
+        elif(cliente.conta == None ):
+            print("Cliente sem conta cadastrada!")
+        else:
+            cliente.imprimeExtratoConta()
     elif opcao.upper() == "Q":
         break
     else:
